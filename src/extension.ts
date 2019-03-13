@@ -24,7 +24,7 @@ export function activate(context: ExtensionContext) {
 		// The code you place here will be executed every time your command is executed
 
 		let decoded = ''
-		const childProcess = cp.spawn(`apitest ${args}`);
+		const childProcess = cp.spawn('apitest', [args]);
 		if (childProcess.pid) {
 			childProcess.stdout.on('data', (data: Buffer) => {
 				decoded += data;
