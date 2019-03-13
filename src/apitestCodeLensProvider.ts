@@ -30,7 +30,7 @@ class ApitestCodeLensProvider implements CodeLensProvider {
 
           if (matches[1].length === indent) {
             let c: Command = {
-              arguments: [`-f ${document.fileName} -t "${matches[2]}"`],
+              arguments: [[`-f`, `${document.fileName}`, `-t`, `"${matches[2]}"`]],
               command: 'apitest.request',
               title: 'Run request'
             }

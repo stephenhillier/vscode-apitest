@@ -20,20 +20,31 @@ export function activate(context: ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let commandDisposable = commands.registerCommand('apitest.request', (args: string) => {
+	let commandDisposable = commands.registerCommand('apitest.request', (args: string[]) => {
 		// The code you place here will be executed every time your command is executed
 
 		let decoded = ''
-		const childProcess = cp.spawn('apitest', [args]);
+		const childProcess = cp.spawn('apitest', [...args]);
 		if (childProcess.pid) {
 			childProcess.stdout.on('data', (data: Buffer) => {
-				decoded += data;
+				decoded += data.toString();
 			});
 			childProcess.stdout.on('end', () => {
 				let channel = getOutputChannel();
 				channel.appendLine(decoded)
 				channel.show(true)
 			})
+
+			childProcess.stderr.on('data', (data: Buffer) => {
+				decoded += data.toString();
+			});
+			childProcess.stderr.on('end', () => {
+				let channel = getOutputChannel();
+				channel.appendLine(decoded)
+				channel.show(true)
+			})
+
+			console.log(args.join(' '))
 		}
 	});
 
